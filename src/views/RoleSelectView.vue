@@ -1,22 +1,32 @@
 <template>
-  <div class="role-select-view">
+  <div class="movie-select-view">
     <div class="header">
-      <h1>选择你的镜子</h1>
-      <p>选择一个角色，开始你的自我觉察之旅</p>
+      <h1>从电影中看见自己</h1>
+      <p>选择一部触动你的电影，开启自我探索之旅</p>
     </div>
 
-    <div class="roles-grid">
+    <div class="movies-grid">
       <div
         v-for="role in roles"
         :key="role.id"
-        class="role-card"
+        class="movie-card"
         @click="selectRole(role.id)"
       >
-        <div class="role-avatar">{{ role.name[0] }}</div>
-        <h3>{{ role.name }}</h3>
-        <p class="role-vibe">{{ role.vibeTags.join(" • ") }}</p>
-        <p class="role-intro">{{ role.introHook }}</p>
-        <div class="role-cta">选择这个角色 →</div>
+        <div class="poster-wrapper">
+          <img :src="role.poster" :alt="role.movie" class="poster-img" />
+          <div class="poster-overlay"></div>
+        </div>
+        
+        <div class="card-content">
+          <h3 class="movie-title">{{ role.movie }}</h3>
+          <p class="theme-keywords">{{ role.themeKeywords.join(" • ") }}</p>
+          <p class="theme-desc">{{ role.description }}</p>
+          
+          <div class="card-footer">
+            <span class="cta-text">探索这个主题</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -25,7 +35,7 @@
       <div class="spinner-wrapper">
         <div class="spinner"></div>
       </div>
-      <p class="loading-text">进入故事...</p>
+      <p class="loading-text">进入电影世界...</p>
     </div>
   </div>
 </template>
@@ -54,7 +64,7 @@ async function selectRole(roleId: string) {
 </script>
 
 <style scoped>
-.role-select-view {
+.movie-select-view {
   min-height: 100vh;
   background: transparent;
   padding: 60px 20px;
@@ -69,224 +79,159 @@ async function selectRole(roleId: string) {
 
 .header h1 {
   font-size: 42px;
-  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
+  background: linear-gradient(135deg, #e9d5ff, #c084fc, #a855f7);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 16px;
   animation: gradientShift 6s ease infinite;
+  letter-spacing: -0.02em;
 }
 
 .header p {
   font-size: 17px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 300;
 }
 
-.roles-grid {
+.movies-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
   max-width: 1200px;
   margin: 0 auto 60px;
   animation: fadeInUp 0.8s ease 0.2s both;
 }
 
-.role-card {
-  padding: 36px 28px;
-  background: rgba(124, 58, 237, 0.08);
+@media (max-width: 1024px) {
+  .movies-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .movies-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.movie-card {
+  background: rgba(30, 27, 75, 0.4);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 24px;
+  border-radius: 16px;
   cursor: pointer;
-  transition: all 0.4s ease;
-  text-align: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  animation: auroraPulse 4s ease-in-out infinite;
+  position: relative;
 }
 
-.role-card:nth-child(2) { animation-delay: 1.5s; }
-.role-card:nth-child(3) { animation-delay: 3s; }
-
-.role-card:hover {
-  background: rgba(124, 58, 237, 0.12);
-  border-color: rgba(129, 140, 248, 0.5);
-  transform: translateY(-10px) scale(1.02);
-  box-shadow:
-    0 25px 50px rgba(124, 58, 237, 0.25),
-    0 0 40px rgba(99, 102, 241, 0.2);
+.movie-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(167, 139, 250, 0.5);
+  box-shadow: 
+    0 20px 40px -10px rgba(124, 58, 237, 0.3),
+    0 0 20px rgba(139, 92, 246, 0.2);
 }
 
-.role-avatar {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 20px;
-  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
-  border-radius: 50%;
+.poster-wrapper {
+  width: 100%;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.poster-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.movie-card:hover .poster-img {
+  transform: scale(1.05);
+}
+
+.poster-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(to top, rgba(30, 27, 75, 0.9), transparent);
+  pointer-events: none;
+}
+
+.card-content {
+  padding: 20px 24px 24px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  font-weight: 700;
-  color: white;
-  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
-  transition: all 0.4s ease;
-}
-
-.role-card:hover .role-avatar {
-  transform: scale(1.1);
-  box-shadow:
-    0 12px 35px rgba(124, 58, 237, 0.5),
-    0 0 25px rgba(99, 102, 241, 0.35);
-}
-
-.role-card h3 {
-  font-size: 22px;
-  margin-bottom: 10px;
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.role-vibe {
-  font-size: 13px;
-  color: var(--indigo-light);
-  margin-bottom: 14px;
-  letter-spacing: 1px;
-}
-
-.role-intro {
-  font-size: 15px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 24px;
+  flex-direction: column;
   flex-grow: 1;
 }
 
-.role-cta {
-  font-size: 14px;
-  color: var(--purple-light);
+.movie-title {
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  font-size: 20px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 12px;
+  line-height: 1.4;
 }
 
-.role-card:hover .role-cta {
-  color: var(--indigo-light);
+.theme-keywords {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  color: #c084fc;
+  margin-bottom: 16px;
+  letter-spacing: 0.03em;
+  opacity: 0.9;
 }
 
-/* 水晶球加载效果 - 极光紫版 */
-.crystal-ball-loading {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: radial-gradient(circle at 50% 50%, rgba(49, 46, 129, 0.6) 0%, rgba(15, 13, 36, 0.98) 100%);
-  backdrop-filter: blur(4px);
+.theme-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 24px;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-footer {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.5s ease-in;
+  gap: 8px;
+  margin-top: auto;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.cta-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e9d5ff;
+  transition: color 0.3s ease;
 }
 
-/* 光晕中心效果 - 极光版 */
-.black-hole {
-  position: absolute;
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 30% 30%,
-    rgba(129, 140, 248, 0.25) 0%,
-    rgba(124, 58, 237, 0.15) 25%,
-    rgba(30, 27, 75, 0.5) 50%,
-    rgba(15, 13, 36, 0.9) 100%
-  );
-  box-shadow:
-    0 0 60px rgba(124, 58, 237, 0.4),
-    0 0 100px rgba(99, 102, 241, 0.25),
-    0 0 140px rgba(139, 92, 246, 0.15),
-    inset 0 0 50px rgba(15, 13, 36, 0.6);
-  animation: pulse 3s ease-in-out infinite;
+.arrow {
+  color: #e9d5ff;
+  transition: transform 0.3s ease;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    box-shadow:
-      0 0 60px rgba(124, 58, 237, 0.4),
-      0 0 100px rgba(99, 102, 241, 0.25),
-      0 0 140px rgba(139, 92, 246, 0.15),
-      inset 0 0 50px rgba(15, 13, 36, 0.6);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow:
-      0 0 80px rgba(124, 58, 237, 0.5),
-      0 0 130px rgba(99, 102, 241, 0.35),
-      0 0 180px rgba(139, 92, 246, 0.2),
-      inset 0 0 60px rgba(15, 13, 36, 0.5);
-    transform: scale(1.08);
-  }
+.movie-card:hover .cta-text {
+  color: #fff;
 }
 
-/* 旋转圆环 - 极光版 */
-.spinner-wrapper {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  z-index: 10;
+.movie-card:hover .arrow {
+  transform: translateX(4px);
+  color: #fff;
 }
 
-.spinner {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border: 3px solid transparent;
-  border-top-color: #7c3aed;
-  border-right-color: #818cf8;
-  border-radius: 50%;
-  animation: spin 2.5s linear infinite;
-  box-shadow:
-    0 0 25px rgba(124, 58, 237, 0.5),
-    0 0 50px rgba(99, 102, 241, 0.25);
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* 加载文字 - 极光版 */
-.loading-text {
-  position: relative;
-  z-index: 10;
-  margin-top: 80px;
-  font-size: 18px;
-  color: var(--purple-soft);
-  letter-spacing: 3px;
-  animation: shimmer 2s ease-in-out infinite;
-  font-weight: 400;
-}
-
-@keyframes shimmer {
-  0%, 100% {
-    color: #8b5cf6;
-    opacity: 0.7;
-    text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
-  }
-  50% {
-    color: #818cf8;
-    opacity: 1;
-    text-shadow: 0 0 20px rgba(129, 140, 248, 0.5);
-  }
-}
-
+/* 动画定义保持不变 */
 @keyframes fadeInDown {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -303,8 +248,40 @@ async function selectRole(roleId: string) {
   100% { background-position: 0% 50%; }
 }
 
-@keyframes auroraPulse {
-  0%, 100% { border-color: rgba(139, 92, 246, 0.2); }
-  50% { border-color: rgba(129, 140, 248, 0.4); }
+/* Loading 样式保持不变 (略微复用之前的) */
+.crystal-ball-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: radial-gradient(circle at 50% 50%, rgba(49, 46, 129, 0.8) 0%, rgba(15, 13, 36, 0.98) 100%);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
+
+.loading-text {
+  margin-top: 40px;
+  color: #c084fc;
+  letter-spacing: 2px;
+}
+
+/* Spinner 复用 */
+.spinner-wrapper {
+  width: 60px;
+  height: 60px;
+}
+.spinner {
+  width: 100%;
+  height: 100%;
+  border: 3px solid rgba(139, 92, 246, 0.3);
+  border-top-color: #c084fc;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 </style>
