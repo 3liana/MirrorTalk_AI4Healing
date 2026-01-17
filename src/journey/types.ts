@@ -83,6 +83,19 @@ export interface MicroAction {
   timeCost: string;
 }
 
+// 8个维度特质
+export interface Dimension {
+  id: string;
+  name: string;
+  value: number; // 0-100，表示在该维度上的倾向
+  description: string;
+  visualMetaphor: string; // 视觉隐喻描述
+  userBehavior: string; // 用户在这个维度上的具体表现
+  summary: string; // 一句话总结
+  imagePrompt?: string; // 图片生成提示词
+  imageUrl?: string; // 生成的图片URL
+}
+
 export interface MirrorReport {
   headline: string;
   thinkingPatterns: Array<{ name: string; description: string; exampleFromYou: string }>;
@@ -90,4 +103,6 @@ export interface MirrorReport {
   microActions: MicroAction[];
   closingLetter: string;
   resources?: Array<{ type: "book" | "podcast" | "community"; title: string; note: string }>;
+  dimensions?: Dimension[]; // 8维度特质
+  pixelArtUrl?: string; // 生成的像素画 URL
 }

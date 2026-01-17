@@ -31,6 +31,11 @@ const routes: RouteRecordRaw[] = [
     component: ReportView,
     meta: { title: "Mirror Report" },
   },
+  {
+    path: "/report-test",
+    component: ReportView,
+    meta: { title: "Mirror Report - Test Mode", isTestMode: true },
+  },
 ];
 
 const router = createRouter({
