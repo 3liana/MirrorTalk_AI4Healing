@@ -29,7 +29,7 @@ export const MemoryPatchSchema = z.object({
 
 export const EndConditionSchema = z.object({
   canEnd: z.boolean(),
-  reason: z.string().optional(),
+  reason: z.string().nullish(), // 允许 null、undefined 或 string
 });
 
 export const TurnSpecSchema = z.object({
@@ -57,6 +57,17 @@ export const ResourceSchema = z.object({
   note: z.string(),
 });
 
+export const DimensionSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  value: z.number(),
+  description: z.string(),
+  visualMetaphor: z.string(),
+  userBehavior: z.string(),
+  summary: z.string(),
+  imagePrompt: z.string().optional(),
+});
+
 export const MirrorReportSchema = z.object({
   headline: z.string(),
   thinkingPatterns: z.array(
@@ -76,6 +87,7 @@ export const MirrorReportSchema = z.object({
   microActions: z.array(MicroActionSchema).length(3),
   closingLetter: z.string(),
   resources: z.array(ResourceSchema).optional(),
+  dimensions: z.array(DimensionSchema).optional(),
 });
 
 export type TurnSpec = z.infer<typeof TurnSpecSchema>;

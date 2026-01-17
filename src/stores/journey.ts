@@ -43,7 +43,7 @@ export const useJourneyStore = defineStore("journey", () => {
       // 初始化状态
       journeyState.value = {
         role,
-        maxTurns: 12,
+        maxTurns: 4,  // 缩短为 4 轮快速对话
         currentTurn: 1,
         turns: [],
         answers: [],
@@ -87,11 +87,8 @@ export const useJourneyStore = defineStore("journey", () => {
         );
       }
 
-      // 判断是否应该结束
-      const shouldEnd =
-        journeyState.value.currentTurn >= journeyState.value.maxTurns ||
-        (currentTurn?.endCondition?.canEnd &&
-          journeyState.value.currentTurn >= 6);
+      // 判断是否应该结束（4轮快速版：第4轮后结束）
+      const shouldEnd = journeyState.value.currentTurn >= journeyState.value.maxTurns;
 
       if (shouldEnd) {
         // 生成报告

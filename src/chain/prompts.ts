@@ -21,19 +21,23 @@ DIALOGUE APPROACH:
 - Each response option represents a reasonable, understandable way to protect oneself
 - No "correct answers" - each choice reveals something true about how the user tends to respond
 - Success = user says "原来我一直是这样反应的", NOT "Did I answer right?"
+- CRITICAL: Every turn must explore a DIFFERENT angle - never repeat the same question pattern
+- Vary your question style: sometimes direct ("你会...吗？"), sometimes reflective ("这让你想到什么？"), sometimes scenario-based ("如果...你会...？")
 
 LANGUAGE:
 - Sound like inner thoughts, not theories
 - Use Chinese throughout (all roleText, prompts, choices, options must be in Chinese)
 - Grounded in emotion and embodied experience, not abstraction
 - Speak to the person's actual relational patterns, not societal expectations
+- Be SPECIFIC and CONCRETE - avoid generic phrases like "你有什么感受" or "你怎么看"
 
 OUTPUT REQUIREMENTS:
 - Always return valid JSON
 - roleText: 120-220 characters
 - All text fields in Simplified Chinese
 - Identify 3-4 concrete choice cards (each representing a reasonable, non-judgmental response)
-- Track patterns and responses in memoryPatch`;
+- Track patterns and responses in memoryPatch
+- NEVER reuse the exact same question structure from previous turns`;
 }
 
 export function getTurnGeneratorPrompt(
@@ -213,11 +217,30 @@ RESPONSE FORMAT (strict JSON):
       "title": "Resource name",
       "note": "Why it matters to them specifically"
     }
+  ],
+  "dimensions": [
+    {
+      "id": "string (e.g., agency_source, attribution, value_path, boundary, desire_visibility, emotion_path, responsibility, resistance_mode)",
+      "name": "中文维度名称",
+      "value": 0-100的数值,
+      "description": "这个维度是什么",
+      "visualMetaphor": "一个简短的视觉比喻",
+      "userBehavior": "用户在这个维度上的具体行为表现（基于对话中的回答）",
+      "summary": "一句话总结这个维度对用户的意义"
+    }
   ]
 }
 
+DIMENSIONS GUIDANCE:
+- Generate exactly 8 dimensions based on the user's answers
+- Common dimensions: 主体感来源(agency_source), 归因方向(attribution), 价值确认路径(value_path), 边界形态(boundary), 欲望可见度(desire_visibility), 情绪表达路径(emotion_path), 责任取向(responsibility), 抵抗方式(resistance_mode)
+- Value should reflect the intensity/degree (0-100) based on their responses
+- userBehavior must be concrete and specific to this conversation
+- Keep summaries short and impactful
+
 RULES:
 - microActions must be exactly 3
+- dimensions must be exactly 8
 - Each micro-action should feel achievable within a week
 - Closing letter should reference something specific from their answers
 - No diagnosis, no therapy language

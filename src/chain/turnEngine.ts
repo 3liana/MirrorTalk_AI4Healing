@@ -143,12 +143,12 @@ function extractJSON(text: string): string {
 }
 
 /**
- * 根据轮数确定模块
+ * 根据轮数确定模块（4 轮快速版本）
  */
 function getModule(turnIndex: number, maxTurns: number): "enter" | "explore" | "action" {
-  if (turnIndex <= 3) return "enter";
-  if (turnIndex <= maxTurns - 3) return "explore";
-  return "action";
+  if (turnIndex === 1) return "enter";      // 第1轮：建立信任
+  if (turnIndex <= 2) return "explore";     // 第2轮：深入探索
+  return "action";                          // 第3-4轮：行动引导
 }
 
 /**
