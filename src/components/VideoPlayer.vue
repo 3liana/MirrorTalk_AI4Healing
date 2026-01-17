@@ -25,14 +25,6 @@
       <!-- Overlay Gradient -->
       <div class="overlay-gradient"></div>
 
-      <!-- Play/Pause Control (Visual Mock) -->
-      <div class="center-controls" v-if="showControls">
-        <button class="play-btn" @click="togglePlay">
-          <svg v-if="isPlaying" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-          <svg v-else xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        </button>
-      </div>
-
       <!-- Subtitles / Role Dialogue -->
       <div class="subtitle-area" v-if="text">
         <div class="subtitle-text">“{{ text }}”</div>

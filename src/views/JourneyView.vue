@@ -6,7 +6,7 @@
       <!-- Left Panel: Video / Character Presence -->
       <div class="left-panel">
         <VideoPlayer
-          :poster-src="journeyState.role.poster"
+          :poster-src="currentTurn.sceneImage || journeyState.role.poster"
           :video-src="journeyState.role.video"
           :text="currentTurn.roleText" 
         />

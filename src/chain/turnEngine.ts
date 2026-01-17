@@ -112,6 +112,13 @@ export async function generateNextTurn(journeyState: JourneyState): Promise<Turn
   // 确保 turnIndex 正确设置
   spec.turnIndex = currentTurn;
 
+  // 好东西角色：随机分配场景图片
+  if (role.id === "haodongxi") {
+    const images = ["1.png", "2.png", "3.png", "4.png"];
+    const randomImage = images[Math.floor(Math.random() * images.length)];
+    spec.sceneImage = `/images/haodongxi/${randomImage}`;
+  }
+
   return spec;
 }
 

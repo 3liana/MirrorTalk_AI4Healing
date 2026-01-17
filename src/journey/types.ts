@@ -55,6 +55,7 @@ export interface TurnSpec {
   gentleWhy?: string;
   memoryPatch?: MemoryPatch;
   endCondition?: EndCondition;
+  sceneImage?: string; // 可选：当前轮次的场景图片路径（好东西专用）
 }
 
 export interface TurnAnswer {

@@ -41,6 +41,7 @@ export const TurnSpecSchema = z.object({
   gentleWhy: z.string().optional(),
   memoryPatch: MemoryPatchSchema.optional(),
   endCondition: EndConditionSchema.optional(),
+  sceneImage: z.string().optional(), // 好东西场景图片
 });
 
 export const MicroActionSchema = z.object({
