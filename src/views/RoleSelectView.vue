@@ -56,166 +56,187 @@ async function selectRole(roleId: string) {
 <style scoped>
 .role-select-view {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #0f0f1e 100%);
+  background: transparent;
   padding: 60px 20px;
+  position: relative;
 }
 
 .header {
   text-align: center;
   margin-bottom: 60px;
+  animation: fadeInDown 0.8s ease;
 }
 
 .header h1 {
-  font-size: 40px;
-  background: linear-gradient(135deg, #6b8cff, #a78bff);
+  font-size: 42px;
+  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  animation: gradientShift 6s ease infinite;
 }
 
 .header p {
-  font-size: 16px;
-  color: #999;
+  font-size: 17px;
+  color: var(--text-secondary);
 }
 
 .roles-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
+  gap: 28px;
   max-width: 1200px;
   margin: 0 auto 60px;
+  animation: fadeInUp 0.8s ease 0.2s both;
 }
 
 .role-card {
-  padding: 32px 24px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  padding: 36px 28px;
+  background: rgba(124, 58, 237, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 24px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
   text-align: center;
   display: flex;
   flex-direction: column;
+  animation: auroraPulse 4s ease-in-out infinite;
 }
 
+.role-card:nth-child(2) { animation-delay: 1.5s; }
+.role-card:nth-child(3) { animation-delay: 3s; }
+
 .role-card:hover {
-  background: rgba(107, 140, 255, 0.15);
-  border-color: rgba(107, 140, 255, 0.4);
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(107, 140, 255, 0.2);
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(129, 140, 248, 0.5);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow:
+    0 25px 50px rgba(124, 58, 237, 0.25),
+    0 0 40px rgba(99, 102, 241, 0.2);
 }
 
 .role-avatar {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 16px;
-  background: linear-gradient(135deg, #6b8cff, #a78bff);
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
   color: white;
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+  transition: all 0.4s ease;
+}
+
+.role-card:hover .role-avatar {
+  transform: scale(1.1);
+  box-shadow:
+    0 12px 35px rgba(124, 58, 237, 0.5),
+    0 0 25px rgba(99, 102, 241, 0.35);
 }
 
 .role-card h3 {
-  font-size: 20px;
-  margin-bottom: 8px;
-  color: #e0e0e0;
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .role-vibe {
-  font-size: 12px;
-  color: #6b8cff;
-  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--indigo-light);
+  margin-bottom: 14px;
+  letter-spacing: 1px;
 }
 
 .role-intro {
-  font-size: 14px;
-  color: #ccc;
-  line-height: 1.5;
-  margin-bottom: 20px;
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 24px;
   flex-grow: 1;
 }
 
 .role-cta {
-  font-size: 13px;
-  color: #6b8cff;
+  font-size: 14px;
+  color: var(--purple-light);
   font-weight: 600;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
 }
 
 .role-card:hover .role-cta {
-  color: #a78bff;
+  color: var(--indigo-light);
 }
 
-/* 水晶球加载效果 */
+/* 水晶球加载效果 - 极光紫版 */
 .crystal-ball-loading {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  background: radial-gradient(circle at 50% 50%, rgba(15, 15, 30, 0.3) 0%, rgba(0, 0, 0, 0.95) 100%);
-  backdrop-filter: blur(2px);
+  background: radial-gradient(circle at 50% 50%, rgba(49, 46, 129, 0.6) 0%, rgba(15, 13, 36, 0.98) 100%);
+  backdrop-filter: blur(4px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: fadeIn 0.4s ease-in;
+  animation: fadeIn 0.5s ease-in;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* 黑洞中心效果 */
+/* 光晕中心效果 - 极光版 */
 .black-hole {
   position: absolute;
-  width: 300px;
-  height: 300px;
+  width: 280px;
+  height: 280px;
   border-radius: 50%;
   background: radial-gradient(
     circle at 30% 30%,
-    rgba(107, 140, 255, 0.3) 0%,
-    rgba(107, 140, 255, 0.1) 20%,
-    rgba(0, 0, 0, 0.5) 50%,
-    rgba(0, 0, 0, 0.95) 100%
+    rgba(129, 140, 248, 0.25) 0%,
+    rgba(124, 58, 237, 0.15) 25%,
+    rgba(30, 27, 75, 0.5) 50%,
+    rgba(15, 13, 36, 0.9) 100%
   );
-  box-shadow: 
-    0 0 60px rgba(107, 140, 255, 0.4),
-    0 0 100px rgba(107, 140, 255, 0.2),
-    inset 0 0 40px rgba(0, 0, 0, 0.8);
-  animation: pulse 2s ease-in-out infinite;
+  box-shadow:
+    0 0 60px rgba(124, 58, 237, 0.4),
+    0 0 100px rgba(99, 102, 241, 0.25),
+    0 0 140px rgba(139, 92, 246, 0.15),
+    inset 0 0 50px rgba(15, 13, 36, 0.6);
+  animation: pulse 3s ease-in-out infinite;
 }
 
 @keyframes pulse {
   0%, 100% {
-    box-shadow: 
-      0 0 60px rgba(107, 140, 255, 0.4),
-      0 0 100px rgba(107, 140, 255, 0.2),
-      inset 0 0 40px rgba(0, 0, 0, 0.8);
+    box-shadow:
+      0 0 60px rgba(124, 58, 237, 0.4),
+      0 0 100px rgba(99, 102, 241, 0.25),
+      0 0 140px rgba(139, 92, 246, 0.15),
+      inset 0 0 50px rgba(15, 13, 36, 0.6);
     transform: scale(1);
   }
   50% {
-    box-shadow: 
-      0 0 80px rgba(107, 140, 255, 0.6),
-      0 0 140px rgba(107, 140, 255, 0.3),
-      inset 0 0 50px rgba(0, 0, 0, 0.7);
-    transform: scale(1.05);
+    box-shadow:
+      0 0 80px rgba(124, 58, 237, 0.5),
+      0 0 130px rgba(99, 102, 241, 0.35),
+      0 0 180px rgba(139, 92, 246, 0.2),
+      inset 0 0 60px rgba(15, 13, 36, 0.5);
+    transform: scale(1.08);
   }
 }
 
-/* 旋转圆环 */
+/* 旋转圆环 - 极光版 */
 .spinner-wrapper {
   position: relative;
   width: 120px;
@@ -228,43 +249,62 @@ async function selectRole(roleId: string) {
   width: 100%;
   height: 100%;
   border: 3px solid transparent;
-  border-top-color: #6b8cff;
-  border-right-color: #a78bff;
+  border-top-color: #7c3aed;
+  border-right-color: #818cf8;
   border-radius: 50%;
-  animation: spin 2s linear infinite;
-  box-shadow: 0 0 30px rgba(107, 140, 255, 0.5);
+  animation: spin 2.5s linear infinite;
+  box-shadow:
+    0 0 25px rgba(124, 58, 237, 0.5),
+    0 0 50px rgba(99, 102, 241, 0.25);
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
-/* 加载文字 */
+/* 加载文字 - 极光版 */
 .loading-text {
   position: relative;
   z-index: 10;
   margin-top: 80px;
   font-size: 18px;
-  color: #a78bff;
-  letter-spacing: 2px;
-  animation: shimmer 1.5s ease-in-out infinite;
-  font-weight: 300;
+  color: var(--purple-soft);
+  letter-spacing: 3px;
+  animation: shimmer 2s ease-in-out infinite;
+  font-weight: 400;
 }
 
 @keyframes shimmer {
   0%, 100% {
-    color: #6b8cff;
+    color: #8b5cf6;
     opacity: 0.7;
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
   }
   50% {
-    color: #a78bff;
+    color: #818cf8;
     opacity: 1;
+    text-shadow: 0 0 20px rgba(129, 140, 248, 0.5);
   }
 }
 
-.loading p {
-  color: #999;
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes auroraPulse {
+  0%, 100% { border-color: rgba(139, 92, 246, 0.2); }
+  50% { border-color: rgba(129, 140, 248, 0.4); }
 }
 </style>

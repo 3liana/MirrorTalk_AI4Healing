@@ -78,44 +78,51 @@ import { RouterLink } from "vue-router";
 <style scoped>
 .landing-view {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #0f0f1e 100%);
+  background: transparent;
   padding: 60px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .container {
   max-width: 1000px;
   width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .hero {
   text-align: center;
   margin-bottom: 80px;
-  animation: fadeInDown 0.8s ease;
+  animation: fadeInDown 1s ease;
 }
 
 .hero-title {
   font-size: 64px;
   font-weight: 800;
-  background: linear-gradient(135deg, #6b8cff, #a78bff);
+  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 8px;
+  animation: gradientShift 6s ease infinite;
+  text-shadow: 0 0 60px rgba(124, 58, 237, 0.3);
 }
 
 .hero-subtitle {
   font-size: 20px;
-  color: #999;
+  color: var(--purple-soft);
   margin-bottom: 24px;
+  letter-spacing: 4px;
 }
 
 .hero-description {
   font-size: 18px;
-  color: #ccc;
-  line-height: 1.6;
+  color: var(--text-secondary);
+  line-height: 1.8;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -123,53 +130,65 @@ import { RouterLink } from "vue-router";
 .value-props {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 24px;
   margin-bottom: 80px;
-  animation: fadeInUp 0.8s ease 0.2s both;
+  animation: fadeInUp 1s ease 0.3s both;
 }
 
 .prop-card {
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  padding: 28px 24px;
+  background: rgba(124, 58, 237, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 20px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
+  animation: auroraPulse 4s ease-in-out infinite;
 }
 
+.prop-card:nth-child(2) { animation-delay: 1s; }
+.prop-card:nth-child(3) { animation-delay: 2s; }
+.prop-card:nth-child(4) { animation-delay: 3s; }
+
 .prop-card:hover {
-  background: rgba(107, 140, 255, 0.1);
-  border-color: rgba(107, 140, 255, 0.3);
-  transform: translateY(-4px);
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(129, 140, 248, 0.5);
+  transform: translateY(-6px);
+  box-shadow:
+    0 20px 40px rgba(124, 58, 237, 0.2),
+    0 0 30px rgba(99, 102, 241, 0.2);
 }
 
 .prop-icon {
-  font-size: 32px;
-  margin-bottom: 12px;
+  font-size: 36px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.5));
 }
 
 .prop-card h3 {
-  font-size: 16px;
-  margin-bottom: 8px;
-  color: #e0e0e0;
+  font-size: 17px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .prop-card p {
-  font-size: 13px;
-  color: #999;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 .journey-preview {
   text-align: center;
   margin-bottom: 80px;
-  animation: fadeInUp 0.8s ease 0.4s both;
+  animation: fadeInUp 1s ease 0.5s both;
 }
 
 .journey-preview h2 {
   font-size: 28px;
   margin-bottom: 40px;
-  color: #e0e0e0;
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .journey-steps {
@@ -184,69 +203,90 @@ import { RouterLink } from "vue-router";
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 24px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  border: 1px solid rgba(107, 140, 255, 0.2);
+  padding: 24px 28px;
+  background: rgba(124, 58, 237, 0.08);
+  border-radius: 16px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.step:hover {
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(129, 140, 248, 0.4);
 }
 
 .step-number {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #6b8cff, #a78bff);
+  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
   border-radius: 50%;
   color: white;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
 }
 
 .step p {
   font-size: 14px;
-  color: #ccc;
+  color: var(--text-secondary);
   margin: 0;
 }
 
 .step-arrow {
   font-size: 20px;
-  color: #6b8cff;
+  color: var(--indigo-light);
   font-weight: bold;
+  opacity: 0.7;
 }
 
 .cta-section {
   text-align: center;
-  animation: fadeInUp 0.8s ease 0.6s both;
+  animation: fadeInUp 1s ease 0.7s both;
 }
 
 .cta-button {
   display: inline-block;
-  padding: 16px 48px;
-  background: linear-gradient(135deg, #6b8cff, #a78bff);
+  padding: 18px 52px;
+  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
+  background-size: 200% 200%;
   color: white;
   text-decoration: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 16px;
+  font-size: 17px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
   border: none;
   cursor: pointer;
+  animation: gradientShift 4s ease infinite, breatheGlow 4s ease-in-out infinite;
+  box-shadow:
+    0 8px 30px rgba(124, 58, 237, 0.35),
+    0 0 20px rgba(99, 102, 241, 0.25);
 }
 
 .cta-button:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(107, 140, 255, 0.4);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow:
+    0 15px 40px rgba(124, 58, 237, 0.45),
+    0 0 40px rgba(99, 102, 241, 0.35);
 }
 
 .arrow {
   margin-left: 8px;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.cta-button:hover .arrow {
+  transform: translateX(4px);
 }
 
 @keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-30px);
   }
   to {
     opacity: 1;
@@ -257,11 +297,35 @@ import { RouterLink } from "vue-router";
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes auroraPulse {
+  0%, 100% { border-color: rgba(139, 92, 246, 0.2); }
+  50% { border-color: rgba(129, 140, 248, 0.4); }
+}
+
+@keyframes breatheGlow {
+  0%, 100% {
+    box-shadow:
+      0 8px 30px rgba(124, 58, 237, 0.35),
+      0 0 20px rgba(99, 102, 241, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 12px 40px rgba(124, 58, 237, 0.45),
+      0 0 35px rgba(99, 102, 241, 0.35);
   }
 }
 </style>

@@ -114,14 +114,15 @@ function resourceEmoji(type: string): string {
 <style scoped>
 .report-view {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #0f0f1e 100%);
+  background: transparent;
   padding: 40px 20px;
+  position: relative;
 }
 
 .report-container {
   max-width: 800px;
   margin: 0 auto;
-  animation: fadeIn 0.6s ease;
+  animation: fadeIn 0.8s ease;
 }
 
 .report-header {
@@ -131,24 +132,29 @@ function resourceEmoji(type: string): string {
 
 .back-btn {
   display: inline-block;
-  color: #6b8cff;
+  color: var(--purple-light);
   text-decoration: none;
   font-size: 14px;
-  margin-bottom: 20px;
-  transition: color 0.2s;
+  margin-bottom: 24px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-  color: #a78bff;
+  color: var(--indigo-light);
+  background: rgba(124, 58, 237, 0.1);
 }
 
 .report-header h1 {
-  font-size: 36px;
-  background: linear-gradient(135deg, #6b8cff, #a78bff);
+  font-size: 38px;
+  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin: 0;
+  animation: gradientShift 6s ease infinite;
 }
 
 .report-content {
@@ -158,198 +164,241 @@ function resourceEmoji(type: string): string {
 }
 
 .report-section {
-  animation: slideIn 0.6s ease;
+  animation: slideIn 0.7s ease;
 }
 
 .report-section h2 {
-  font-size: 20px;
-  color: #e0e0e0;
-  margin-bottom: 24px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(107, 140, 255, 0.2);
+  font-size: 21px;
+  color: var(--text-primary);
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(124, 58, 237, 0.25);
 }
 
 .pattern-card,
 .need-card {
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-left: 3px solid #6b8cff;
-  border-radius: 6px;
-  margin-bottom: 16px;
-  transition: all 0.3s ease;
+  padding: 24px;
+  background: rgba(124, 58, 237, 0.08);
+  border-left: 4px solid var(--purple-main);
+  border-radius: 12px;
+  margin-bottom: 18px;
+  transition: all 0.4s ease;
 }
 
 .pattern-card:hover,
 .need-card:hover {
-  background: rgba(107, 140, 255, 0.1);
-  transform: translateX(4px);
+  background: rgba(124, 58, 237, 0.12);
+  border-left-color: var(--indigo-light);
+  transform: translateX(6px);
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.15);
 }
 
 .pattern-card h3,
 .need-card h3 {
-  color: #e0e0e0;
-  margin: 0 0 8px;
-  font-size: 16px;
+  color: var(--text-primary);
+  margin: 0 0 10px;
+  font-size: 17px;
+  font-weight: 600;
 }
 
 .pattern-card p,
 .need-card p {
-  color: #ccc;
-  margin: 0 0 12px;
-  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0 0 14px;
+  line-height: 1.6;
 }
 
 .example,
 .reminder {
-  font-size: 13px;
-  color: #999;
+  font-size: 14px;
+  color: var(--indigo-soft);
   font-style: italic;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 4px;
+  padding: 12px;
+  background: rgba(129, 140, 248, 0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(129, 140, 248, 0.15);
 }
 
 .actions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
 }
 
 .action-card {
-  padding: 24px;
-  background: rgba(107, 140, 255, 0.1);
-  border: 1px solid rgba(107, 140, 255, 0.3);
-  border-radius: 8px;
+  padding: 28px;
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 16px;
   text-align: center;
+  transition: all 0.4s ease;
+}
+
+.action-card:hover {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(129, 140, 248, 0.4);
+  transform: translateY(-6px);
+  box-shadow:
+    0 15px 35px rgba(124, 58, 237, 0.2),
+    0 0 25px rgba(99, 102, 241, 0.15);
 }
 
 .action-number {
-  width: 40px;
-  height: 40px;
-  margin: 0 auto 12px;
-  background: linear-gradient(135deg, #6b8cff, #a78bff);
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   color: white;
+  font-size: 18px;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
 }
 
 .action-card h3 {
-  color: #e0e0e0;
-  margin: 0 0 12px;
-  font-size: 16px;
+  color: var(--text-primary);
+  margin: 0 0 14px;
+  font-size: 17px;
+  font-weight: 600;
 }
 
 .action-why {
-  font-size: 13px;
-  color: #999;
-  margin: 0 0 12px;
-  line-height: 1.4;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 14px;
+  line-height: 1.5;
 }
 
 .action-how {
-  font-size: 13px;
-  color: #ccc;
-  margin: 12px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 14px 0;
   text-align: left;
+  padding: 12px;
+  background: rgba(124, 58, 237, 0.08);
+  border-radius: 8px;
 }
 
 .action-time {
-  font-size: 12px;
-  color: #6b8cff;
-  margin-top: 12px;
+  font-size: 13px;
+  color: var(--indigo-light);
+  margin-top: 14px;
+  font-weight: 500;
 }
 
 .closing-letter {
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ccc;
-  line-height: 1.8;
-  font-size: 15px;
+  padding: 32px;
+  background: rgba(124, 58, 237, 0.08);
+  border-radius: 16px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  color: var(--text-secondary);
+  line-height: 2;
+  font-size: 16px;
+  position: relative;
+}
+
+.closing-letter::before {
+  content: '"';
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  font-size: 48px;
+  color: rgba(129, 140, 248, 0.3);
+  font-family: Georgia, serif;
 }
 
 .resources-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
 }
 
 .resource-card {
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  background: rgba(124, 58, 237, 0.08);
+  border-radius: 14px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
 }
 
 .resource-card:hover {
-  background: rgba(107, 140, 255, 0.1);
-  border-color: rgba(107, 140, 255, 0.3);
-  transform: translateY(-4px);
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(129, 140, 248, 0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
 }
 
 .resource-type {
-  font-size: 32px;
-  margin-bottom: 8px;
+  font-size: 36px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.4));
 }
 
 .resource-card h4 {
-  color: #e0e0e0;
-  margin: 0 0 8px;
-  font-size: 13px;
+  color: var(--text-primary);
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .resource-card p {
-  color: #999;
+  color: var(--text-secondary);
   margin: 0;
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .report-footer {
   text-align: center;
-  padding-top: 40px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 50px;
+  border-top: 1px solid rgba(124, 58, 237, 0.2);
 }
 
 .restart-btn {
   display: inline-block;
-  padding: 12px 32px;
-  background: linear-gradient(135deg, #6b8cff, #a78bff);
+  padding: 16px 44px;
+  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
+  background-size: 200% 200%;
   color: white;
   text-decoration: none;
-  border-radius: 6px;
+  border-radius: 14px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  font-size: 16px;
+  transition: all 0.4s ease;
+  animation: gradientShift 4s ease infinite;
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.35);
 }
 
 .restart-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(107, 140, 255, 0.3);
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 35px rgba(124, 58, 237, 0.45),
+    0 0 30px rgba(99, 102, 241, 0.25);
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(25px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 </style>

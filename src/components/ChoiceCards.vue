@@ -56,47 +56,55 @@ function selectChoice(id: string) {
 
 <style scoped>
 .choice-cards-container {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
 }
 
 .choice-card {
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: #e0e0e0;
+  padding: 18px 16px;
+  background: rgba(124, 58, 237, 0.08);
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  border-radius: 14px;
+  color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
   text-align: left;
 }
 
 .choice-card:hover {
-  background: rgba(107, 140, 255, 0.1);
-  border-color: rgba(107, 140, 255, 0.3);
-  transform: translateY(-2px);
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(129, 140, 248, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.15);
 }
 
 .choice-card.selected {
-  background: rgba(107, 140, 255, 0.25);
-  border-color: #6b8cff;
-  box-shadow: 0 0 12px rgba(107, 140, 255, 0.3);
+  background: rgba(124, 58, 237, 0.18);
+  border-color: var(--indigo-light);
+  box-shadow:
+    0 0 15px rgba(129, 140, 248, 0.35),
+    0 0 30px rgba(124, 58, 237, 0.15);
 }
 
 .card-title {
   font-weight: 600;
-  margin-bottom: 4px;
-  font-size: 14px;
+  margin-bottom: 6px;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.choice-card.selected .card-title {
+  color: var(--indigo-light);
 }
 
 .card-description {
-  font-size: 12px;
-  color: #999;
-  line-height: 1.4;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 </style>

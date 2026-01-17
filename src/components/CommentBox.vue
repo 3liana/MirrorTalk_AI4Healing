@@ -47,37 +47,44 @@ defineExpose({
 
 <style scoped>
 .comment-box-container {
-  margin-bottom: 24px;
+  margin-bottom: 26px;
 }
 
 .comment-input {
   width: 100%;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: #e0e0e0;
+  padding: 14px 16px;
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+  color: var(--text-primary);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   resize: vertical;
-  min-height: 60px;
-  transition: all 0.2s;
+  min-height: 70px;
+  transition: all 0.3s ease;
+}
+
+.comment-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
 }
 
 .comment-input:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(107, 140, 255, 0.3);
-  box-shadow: 0 0 8px rgba(107, 140, 255, 0.1);
+  background: rgba(124, 58, 237, 0.1);
+  border-color: rgba(129, 140, 248, 0.45);
+  box-shadow:
+    0 0 15px rgba(124, 58, 237, 0.15),
+    0 0 30px rgba(99, 102, 241, 0.1);
 }
 
 .comment-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 12px;
-  color: #999;
+  color: var(--text-secondary);
 }
 
 .char-count {
@@ -85,7 +92,8 @@ defineExpose({
 }
 
 .hint-text {
-  color: rgba(107, 140, 255, 0.6);
+  color: var(--indigo-light);
   font-size: 12px;
+  opacity: 0.8;
 }
 </style>

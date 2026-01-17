@@ -165,8 +165,9 @@ async function submitAnswer() {
 <style scoped>
 .journey-view {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #0f0f1e 100%);
+  background: transparent;
   padding: 40px 20px;
+  position: relative;
 }
 
 .journey-header {
@@ -182,20 +183,24 @@ async function submitAnswer() {
 }
 
 .back-btn {
-  color: #6b8cff;
+  color: var(--purple-light);
   text-decoration: none;
   font-size: 14px;
-  transition: color 0.2s;
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 8px;
 }
 
 .back-btn:hover {
-  color: #a78bff;
+  color: var(--indigo-light);
+  background: rgba(124, 58, 237, 0.1);
 }
 
 .header-top h2 {
-  font-size: 24px;
-  color: #e0e0e0;
+  font-size: 26px;
+  color: var(--text-primary);
   margin: 0;
+  font-weight: 600;
 }
 
 .header-spacer {
@@ -205,64 +210,73 @@ async function submitAnswer() {
 .journey-content {
   max-width: 800px;
   margin: 0 auto;
+  animation: fadeIn 0.6s ease;
 }
 
 .interaction-area {
-  animation: fadeIn 0.4s ease;
+  animation: fadeIn 0.5s ease;
 }
 
 .prompt-text {
-  font-size: 14px;
-  color: #999;
-  margin-bottom: 16px;
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
   font-weight: 500;
 }
 
 .next-btn {
   display: block;
-  margin: 32px auto 0;
-  padding: 12px 32px;
-  background: linear-gradient(135deg, #6b8cff, #a78bff);
+  margin: 36px auto 0;
+  padding: 14px 40px;
+  background: linear-gradient(135deg, #7c3aed, #6366f1, #818cf8);
+  background-size: 200% 200%;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
+  animation: gradientShift 4s ease infinite;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3);
 }
 
 .next-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(107, 140, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 30px rgba(124, 58, 237, 0.4),
+    0 0 20px rgba(99, 102, 241, 0.25);
 }
 
 .next-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
+  animation: none;
 }
+
 .choice-summary,
 .comment-summary {
-  padding: 12px;
-  background: rgba(107, 140, 255, 0.1);
-  border: 1px solid rgba(107, 140, 255, 0.3);
-  border-radius: 6px;
-  color: #6b8cff;
+  padding: 14px;
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  border-radius: 10px;
+  color: var(--indigo-light);
   font-size: 14px;
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .summary-label {
   font-weight: 500;
 }
+
 .loading-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 15, 30, 0.9);
+  background: radial-gradient(circle at 50% 50%, rgba(49, 46, 129, 0.95) 0%, rgba(15, 13, 36, 0.98) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -271,25 +285,25 @@ async function submitAnswer() {
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(107, 140, 255, 0.3);
-  border-top-color: #6b8cff;
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(124, 58, 237, 0.2);
+  border-top-color: #7c3aed;
+  border-right-color: #818cf8;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 16px;
+  animation: spin 1.5s linear infinite;
+  margin-bottom: 20px;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.35);
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -297,8 +311,15 @@ async function submitAnswer() {
   }
 }
 
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .loading-overlay p {
-  color: #999;
-  font-size: 14px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  letter-spacing: 1px;
 }
 </style>

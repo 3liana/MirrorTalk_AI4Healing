@@ -107,18 +107,23 @@ onUnmounted(() => {
 <style scoped>
 .typewriter-container {
   position: relative;
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 24px;
+  padding: 28px;
+  background: rgba(124, 58, 237, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  margin-bottom: 28px;
+  transition: all 0.3s ease;
+}
+
+.typewriter-container:hover {
+  border-color: rgba(129, 140, 248, 0.35);
 }
 
 .typewriter-text {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #e0e0e0;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-warm);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   min-height: 60px;
   white-space: pre-wrap;
@@ -129,42 +134,40 @@ onUnmounted(() => {
   display: inline-block;
   width: 2px;
   height: 1em;
-  background-color: #6b8cff;
-  animation: blink 0.7s infinite;
+  background: linear-gradient(180deg, #7c3aed, #818cf8);
+  animation: blink 0.8s ease-in-out infinite;
   margin-left: 2px;
+  border-radius: 1px;
 }
 
 @keyframes blink {
-  0%, 50% {
-    opacity: 1;
-  }
-  51%, 100% {
-    opacity: 0;
-  }
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
 }
 
 .typewriter-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
+  margin-top: 16px;
   font-size: 12px;
-  color: #999;
+  color: var(--text-secondary);
 }
 
 .skip-btn {
-  background: rgba(107, 140, 255, 0.2);
-  border: 1px solid rgba(107, 140, 255, 0.5);
-  color: #6b8cff;
-  padding: 4px 12px;
-  border-radius: 4px;
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: var(--purple-light);
+  padding: 6px 14px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 12px;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
 }
 
 .skip-btn:hover {
-  background: rgba(107, 140, 255, 0.3);
-  border-color: #6b8cff;
+  background: rgba(124, 58, 237, 0.25);
+  border-color: rgba(129, 140, 248, 0.5);
+  color: var(--indigo-light);
 }
 </style>
