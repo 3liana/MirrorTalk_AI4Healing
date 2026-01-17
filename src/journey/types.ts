@@ -8,7 +8,11 @@ export interface RoleProfile {
   id: string;
   name: string;           // 角色名
   movie: string;          // 来源电影/剧
-  vibeTags: string[];     // 氛围标签
+  video?: string;         // 视频路径 (mp4)
+  poster: string;         // 电影海报路径
+  description: string;    // 核心议题描述 (用于卡片展示)
+  themeKeywords: string[];// 主题关键词
+  vibeTags: string[];     // 氛围标签 (兼容现有逻辑)
   introHook: string;      // 开场引子
   safetyFrame: string;    // 框架话术
   keyMoments?: string[];  // 可选：电影中的关键情节/选择，供 AI 回顾使用

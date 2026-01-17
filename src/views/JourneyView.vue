@@ -1,76 +1,102 @@
 <template>
   <div class="journey-view">
-    <div class="journey-header">
-      <div class="header-top">
-        <router-link to="/role" class="back-btn">← 返回选择</router-link>
-        <h2>{{ journeyState?.role.name }}</h2>
-        <div class="header-spacer"></div>
+    <!-- Split Screen Container -->
+    <div class="split-layout" v-if="journeyState && currentTurn">
+      
+      <!-- Left Panel: Video / Character Presence -->
+      <div class="left-panel">
+        <VideoPlayer
+          :poster-src="journeyState.role.poster"
+          :video-src="journeyState.role.video"
+          :text="currentTurn.roleText" 
+        />
+        
+        <!-- Back Button (Floating on top left) -->
+        <router-link to="/role" class="back-btn floating-back">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </router-link>
       </div>
 
-      <ProgressBar
-        v-if="journeyState"
-        :current-turn="journeyState.currentTurn"
-        :max-turns="journeyState.maxTurns"
-      />
-    </div>
-
-    <div v-if="journeyState && currentTurn" class="journey-content">
-      <TypewriterText
-        :text="currentTurn.roleText"
-        :speed="speed"
-        @complete="onTextComplete"
-      />
-
-      <div v-if="showInteraction" class="interaction-area">
-        <div class="prompt-text">{{ currentTurn.interaction.prompt }}</div>
-
-        <!-- Choice Cards -->
-        <ChoiceCards
-          v-if="
-            currentTurn.interaction.type === 'single_choice' ||
-            (currentTurn.interaction.type === 'choice_plus_comment' && comment.length === 0)
-          "
-          :choices="currentTurn.interaction.choices || []"
-          :max-select="currentTurn.interaction.maxSelect || 1"
-          @select="onChoiceSelect"
-        />
-
-        <!-- Choice Summary (when choice_plus_comment has selection) -->
-        <div v-if="currentTurn.interaction.type === 'choice_plus_comment' && selectedChoiceIds.length > 0" class="choice-summary">
-          <span class="summary-label">✓ 已选择</span>
+      <!-- Right Panel: Interaction & Analysis -->
+      <div class="right-panel">
+        
+        <!-- Top Status Bar -->
+        <div class="panel-header">
+           <div class="live-status">
+              <span class="eye-icon">👁</span> 实时觉察
+           </div>
+           <div class="live-indicator">
+              LIVE <span class="dot"></span>
+           </div>
         </div>
 
-        <!-- Comment Box -->
-        <CommentBox
-          v-if="
-            currentTurn.interaction.type === 'short_comment' ||
-            (currentTurn.interaction.type === 'choice_plus_comment' && selectedChoiceIds.length === 0)
-          "
-          :max-chars="currentTurn.interaction.maxCommentChars || 80"
-          @update="onCommentUpdate"
-          ref="commentBoxRef"
-        />
+        <div class="panel-content">
+           <!-- Scene Info -->
+           <div class="scene-info">
+              <span class="scene-tag">SCENE {{ currentTurn.turnIndex + 1 }}</span>
+           </div>
 
-        <!-- Comment Summary (when choice_plus_comment has comment) -->
-        <div v-if="currentTurn.interaction.type === 'choice_plus_comment' && comment.length > 0" class="comment-summary">
-          <span class="summary-label">✓ 已输入</span>
+           <!-- The Question / Prompt -->
+           <div class="interaction-card">
+              <div class="question-text">
+                <Transition name="msg-slide" mode="out-in" appear>
+                  <TypewriterText
+                    :key="currentTurn.interaction.prompt"
+                    :text="currentTurn.interaction.prompt"
+                    :speed="speed"
+                    @complete="onTextComplete"
+                  />
+                </Transition>
+              </div>
+
+              <!-- Choice Cards -->
+              <Transition name="fade-slide">
+                <div class="choices-area" v-if="showInteraction">
+                   <ChoiceCards
+                      v-if="
+                        currentTurn.interaction.type === 'single_choice' ||
+                        (currentTurn.interaction.type === 'choice_plus_comment' && comment.length === 0)
+                      "
+                      :choices="currentTurn.interaction.choices || []"
+                      :max-select="currentTurn.interaction.maxSelect || 1"
+                      @select="onChoiceSelect"
+                    />
+
+                    <!-- Comment Box -->
+                    <CommentBox
+                      v-if="
+                        currentTurn.interaction.type === 'short_comment' ||
+                        (currentTurn.interaction.type === 'choice_plus_comment' && selectedChoiceIds.length === 0)
+                      "
+                      :max-chars="currentTurn.interaction.maxCommentChars || 80"
+                      @update="onCommentUpdate"
+                      ref="commentBoxRef"
+                    />
+                    
+                    <!-- Submit Button (Only show if valid selection made) -->
+                    <div class="actions-row" v-if="canSubmit">
+                        <button 
+                          @click="submitAnswer" 
+                          class="submit-btn" 
+                          :disabled="isSubmitting"
+                        >
+                           {{ isSubmitting ? "分析中..." : "确认" }}
+                           <svg v-if="!isSubmitting" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
+              </Transition>
+           </div>
         </div>
 
-        <!-- Next Button -->
-        <button
-          v-if="canSubmit"
-          @click="submitAnswer"
-          class="next-btn"
-          :disabled="isSubmitting"
-        >
-          {{ isSubmitting ? "处理中..." : "继续" }}
-        </button>
+
+
       </div>
     </div>
 
     <div v-if="isLoading" class="loading-overlay">
       <div class="spinner"></div>
-      <p>生成下一轮对话...</p>
+      <p>正在生成下一层觉察...</p>
     </div>
   </div>
 </template>
@@ -79,16 +105,17 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useJourneyStore } from "@/stores/journey";
+import VideoPlayer from "@/components/VideoPlayer.vue";
 import TypewriterText from "@/components/TypewriterText.vue";
 import ChoiceCards from "@/components/ChoiceCards.vue";
 import CommentBox from "@/components/CommentBox.vue";
-import ProgressBar from "@/components/ProgressBar.vue";
+// removed ProgressBar use as it's not in the design reference
 
 const router = useRouter();
 const journeyStore = useJourneyStore();
 
 const speed = ref<"slow" | "normal" | "fast">("normal");
-const showInteraction = ref(false);
+const showInteraction = ref(false); // Controls when choices appear (after text)
 const selectedChoiceIds = ref<string[]>([]);
 const comment = ref("");
 const isSubmitting = ref(false);
@@ -111,7 +138,7 @@ const canSubmit = computed(() => {
 
   if (type === "single_choice") return hasChoice;
   if (type === "short_comment") return hasComment;
-  if (type === "choice_plus_comment") return hasChoice || hasComment; // 选择或输入其一即可
+  if (type === "choice_plus_comment") return hasChoice || hasComment; 
   return false;
 });
 
@@ -121,7 +148,6 @@ function onTextComplete() {
 
 function onChoiceSelect(choiceIds: string[]) {
   selectedChoiceIds.value = choiceIds;
-  console.log("选择已更新:", choiceIds);
 }
 
 function onCommentUpdate(text: string) {
@@ -142,11 +168,10 @@ async function submitAnswer() {
 
     await journeyStore.submitAnswer(answer);
 
-    // 检查是否完成
     if (journeyStore.currentReport) {
       router.push("/report");
     } else {
-      // 重置交互状态
+      // Reset for next turn
       showInteraction.value = false;
       selectedChoiceIds.value = [];
       comment.value = "";
@@ -164,141 +189,244 @@ async function submitAnswer() {
 
 <style scoped>
 .journey-view {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #0f0f1e 100%);
-  padding: 40px 20px;
+  width: 100vw;
+  height: 100vh;
+  background: #0f172a; /* Dark background base */
+  overflow: hidden;
+  color: #fff;
 }
 
-.journey-header {
-  max-width: 800px;
-  margin: 0 auto 40px;
-}
-
-.header-top {
+.split-layout {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+  width: 100%;
+  height: 100%;
 }
 
-.back-btn {
-  color: #6b8cff;
-  text-decoration: none;
-  font-size: 14px;
-  transition: color 0.2s;
+/* LEFT PANEL (Video) */
+.left-panel {
+  flex: 65; /* 65% width */
+  position: relative;
+  background: #000;
+  display: flex; /* Ensure VideoPlayer fills it */
 }
 
-.back-btn:hover {
-  color: #a78bff;
-}
-
-.header-top h2 {
-  font-size: 24px;
-  color: #e0e0e0;
-  margin: 0;
-}
-
-.header-spacer {
-  width: 60px;
-}
-
-.journey-content {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.interaction-area {
-  animation: fadeIn 0.4s ease;
-}
-
-.prompt-text {
-  font-size: 14px;
-  color: #999;
-  margin-bottom: 16px;
-  font-weight: 500;
-}
-
-.next-btn {
-  display: block;
-  margin: 32px auto 0;
-  padding: 12px 32px;
-  background: linear-gradient(135deg, #6b8cff, #a78bff);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.next-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(107, 140, 255, 0.3);
-}
-
-.next-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-.choice-summary,
-.comment-summary {
-  padding: 12px;
-  background: rgba(107, 140, 255, 0.1);
-  border: 1px solid rgba(107, 140, 255, 0.3);
-  border-radius: 6px;
-  color: #6b8cff;
-  font-size: 14px;
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-.summary-label {
-  font-weight: 500;
-}
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(15, 15, 30, 0.9);
+.floating-back {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 20;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  width: 40px;
+  height: 40px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  border-radius: 50%;
+  color: white;
+  transition: all 0.3s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.floating-back:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateX(-2px);
+}
+
+/* RIGHT PANEL (Interaction) */
+.right-panel {
+  flex: 35; /* 35% width */
+  background: #111425; /* Dark blue/purple shade from UI */
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  border-left: 1px solid rgba(255,255,255,0.05);
+  position: relative;
+  height: 100%; /* Ensure full height for flex calc */
+  overflow: hidden; /* Prevent outer scroll */
+}
+
+/* Right Panel Header */
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: rgba(167, 139, 250, 0.8);
+    font-weight: 600;
+    text-transform: uppercase;
+    flex-shrink: 0; /* Keep header fixed size */
+}
+
+.panel-content {
+    flex: 1; /* Take remaining height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    min-height: 0; /* Allow shrinking below content size */
+    padding-right: 8px; /* Space for scrollbar */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Custom Scrollbar for Panel Content */
+.panel-content::-webkit-scrollbar {
+    width: 6px;
+}
+.panel-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+.panel-content::-webkit-scrollbar-thumb {
+    background: rgba(167, 139, 250, 0.3);
+    border-radius: 4px;
+}
+.panel-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(167, 139, 250, 0.5);
+}
+
+.live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.5);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Scene Info */
+.scene-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    flex-shrink: 0;
+} 
+
+.scene-tag {
+    background: rgba(124, 58, 237, 0.2);
+    color: #a78bfa;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* Interaction Card */
+.interaction-card {
+    /* flex: 1;  Removed to allow content to dictate height within scroll area */
+    display: flex;
+    flex-direction: column;
+}
+
+.question-text {
+    font-size: 22px;
+    line-height: 1.4;
+    font-weight: 600;
+    margin-bottom: 32px;
+    min-height: 80px; /* Prevent layout jump */
+}
+
+
+
+/* Buttons */
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #2dd4bf; /* Teal/Cyan accent */
+    color: #0f172a;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: #14b8a6;
+    transform: translateY(-1px);
+}
+
+.submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Loading */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba(107, 140, 255, 0.3);
-  border-top-color: #6b8cff;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: #a78bfa;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 16px;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ANIMATIONS */
+/* Question Text Slide */
+.msg-slide-enter-active,
+.msg-slide-leave-active {
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.msg-slide-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.msg-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Choices Area Slide */
+.fade-slide-enter-active {
+  transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-
-.loading-overlay p {
-  color: #999;
-  font-size: 14px;
+.fade-slide-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>
